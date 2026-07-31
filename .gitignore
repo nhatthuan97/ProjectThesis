@@ -33,3 +33,9 @@ Weekly_Meeting_Report/weekly_meeting.pdf
 # --- Editor/OS noise ---
 .vscode/
 .DS_Store
+.claude/
+
+# --- Not published (kept local only) ---
+Grant/
+Weekly_Meeting_Report/
+Personal_Weekly_Update/

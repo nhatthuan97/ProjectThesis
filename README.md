@@ -38,9 +38,9 @@ from distribution shift, not headcount.
 |---|---|
 | `Code/` | Experiments. `01_baseline_fullscale`: centralized multi-model baseline + five FL aggregation methods (FedAvg/FedProx/FedAvgM/FedAdam/SCAFFOLD). `02_consent_churn`: the three-regime consent-churn study. See `Code/README.md` for environment setup. |
 | `Disertation_at_Work/` | Dissertation proposal (`main.tex`) and figures from the published component papers (Spark benchmarking, blockchain/IPFS consent layer, COVID supply-chain study). |
-| `Grant/` | NSF CDS&E proposal draft on the same research program. |
-| `Weekly_Meeting_Report/` | Beamer slide deck for advisor meetings. |
-| `Personal_Weekly_Update/` | Written progress logs. |
+
+Grant drafts, meeting slides, and personal progress logs are kept locally and
+not published in this repository.
 
 ## Status
 
