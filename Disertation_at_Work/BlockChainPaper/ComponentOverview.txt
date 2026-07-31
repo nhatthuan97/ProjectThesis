@@ -1,0 +1,39 @@
+@startuml ComponentOverview
+
+!define ComponentColor #LightBlue
+!define DatabaseColor #LightBlue
+
+skinparam component {
+    BackgroundColor ComponentColor
+    BorderColor black
+    FontColor black
+}
+
+package "CareGiver" {
+    ["view() if have permission"]
+    ["modify() if have permission"]
+    [addPermission]
+    [revokePermission]
+}
+
+package "Blockchain Smart Contract" {
+    [viewInformation]
+    [grantPermission]
+    [rescindPermission]
+    
+    database "Stored Data" as Stored #Orange {
+        (CID)
+        (OwnerWalletID)
+        (AuthorizedViewList)
+        (DecryptionKey)
+    }
+}
+
+package "IPFS" {
+    database "Stored Data" as storage #Orange{
+        (" CID")
+        (EncryptedInformation)
+    }
+}
+
+@enduml
