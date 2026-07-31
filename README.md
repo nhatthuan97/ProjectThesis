@@ -41,6 +41,8 @@ from distribution shift, not headcount.
 
 ## Status
 
-Utility-cost axis (RQ2) executed and H2 confirmed. Next: MLP amplification
-check, then the systems-cost axis (on-chain gas/latency instrumentation driven
-by the same churn schedules), then the joint frontier.
+Utility-cost axis (RQ2) executed and H2 confirmed, including the MLP
+amplification check: rerunning the full churn grid with a higher-capacity MLP
+client reproduces the logreg deltas within noise, so the churn-cost structure
+is model-independent. Next: the systems-cost axis (on-chain gas/latency
+instrumentation driven by the same churn schedules), then the joint frontier.

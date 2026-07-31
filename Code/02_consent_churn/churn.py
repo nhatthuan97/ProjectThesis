@@ -131,10 +131,12 @@ def matched_random_schedule(silos, n_remove, depart_round=0, seed=0):
 # Runner
 # --------------------------------------------------------------------------- #
 def evaluate_run(Xtr, ytr, Xte, yte, silos, nf, schedule, *,
-                 method="fedavg", seed=0, rounds=40):
+                 method="fedavg", seed=0, rounds=40, model="logreg", hidden=32,
+                 lr=0.1):
     """Train under a churn schedule; return metrics on the global test set."""
     p = federated_train(Xtr, ytr, silos, Xte, method=method, nf=nf, seed=seed,
-                        rounds=rounds, round_silos=schedule, balanced=True)
+                        rounds=rounds, round_silos=schedule, balanced=True,
+                        model=model, hidden=hidden, lr=lr)
     yh = (p >= 0.5).astype(int)
     return dict(AUROC=roc_auc_score(yte, p),
                 PR_AUC=average_precision_score(yte, p),
