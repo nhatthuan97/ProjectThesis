@@ -1,0 +1,28 @@
+@startuml ComponentOverview
+
+
+skinparam component {
+    BackgroundColor ComponentColor
+    BorderColor black
+    FontColor black
+}
+
+package "CareGiver" {
+    ["view()  if have permission"]
+    ["modify()  if have permission"]
+}
+
+package "Insurance Providier" {
+    ["view() if have permission"]
+    ["modify() if have permission"]
+}
+
+package "Patient" {
+    ["view()"]
+    ["modify()"]
+    ["addPermission()"]
+    ["revokePermission()"]
+    
+}
+
+@enduml

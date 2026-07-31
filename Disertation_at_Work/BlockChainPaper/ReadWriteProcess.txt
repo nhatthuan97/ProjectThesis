@@ -1,0 +1,27 @@
+@startuml
+actor User
+entity "Python Application" as Python
+entity "Blockchain SmartContract" as SmartContract
+entity IPFS
+
+User -> Python: Request to view/modify info
+Python -> SmartContract: Verify permission
+SmartContract --> Python: CID and decryption key (if permitted)\nAccess Denied (if not permitted)
+alt If user has permission
+    Python -> IPFS: Request to download encrypted data using CID
+    IPFS --> Python: Send encrypted data
+    Python --> Python: Decrypt the data
+    Python --> User: Send decrypted data
+    alt If user wants to modify information
+        User -> Python: Send modified information
+        Python -> SmartContract: Request key and CID for encryption
+        SmartContract --> Python: Provide key and CID
+        Python --> Python: Encrypt modified information using key
+        Python -> IPFS: Send encrypted information for storage using CID
+        IPFS --> Python: Confirm storage
+        Python --> User: Confirm modification
+    end
+else
+    Python --> User: Access Denied
+end
+@enduml

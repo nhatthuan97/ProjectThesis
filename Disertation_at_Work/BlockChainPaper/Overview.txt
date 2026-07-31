@@ -1,0 +1,50 @@
+@startuml
+!define RECTANGLE class
+
+RECTANGLE PythonApplicationLayer {
+  Web3 Library
+  Fernet Encryption
+}
+
+RECTANGLE IPFS {
+  Decentralized Storage
+}
+
+RECTANGLE Blockchain {
+  Smart Contract
+}
+
+RECTANGLE User << (P, lightblue) >> {
+  Patient
+}
+
+RECTANGLE User << (C, lightgreen) >> {
+  Caregiver
+}
+
+RECTANGLE User << (I, orange) >> {
+  Insurance Provider
+}
+
+User -[hidden]- User
+User -[hidden]- User
+
+PythonApplicationLayer -down-> IPFS : stores/retrieves\nencrypted data
+PythonApplicationLayer -down-> Blockchain : interacts via\nSmart Contract
+
+User --> PythonApplicationLayer : interacts with\nthe system
+
+note right of IPFS
+  Encrypted patient data storage
+end note
+
+note right of Blockchain
+  Access control and data integrity
+end note
+
+note left of User
+  Different roles interact
+  with the system differently
+end note
+
+@enduml

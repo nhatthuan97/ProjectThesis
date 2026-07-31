@@ -1,0 +1,59 @@
+@startuml
+
+!define ENTITY entity
+!define DATABASE database
+
+skinparam rectangle {
+    BorderColor DarkSlateGray
+    BackgroundColor LightCyan
+}
+
+DATABASE Synthea as Synthea {
+    ENTITY ORGANIZATION {}
+    ENTITY MEDICATION {}
+    ENTITY PATIENT {}
+    ENTITY "Others" as additionalEntities {}
+}
+
+ENTITY "Consolidated Data" as consolidatedData {
+    + Id
+    + FIRST
+    + LAST
+    + Insurance_name
+    + Provider Name
+    + ...
+}
+
+ENTITY "PYTHON" as python {
+    + Process Data
+    + Encrypt Data
+    + Communicate with IPFS and Blockchain
+}
+
+ENTITY "Individual Patient Record" as patientRecord1 {
+    + Patient Data
+}
+
+ENTITY "Individual Encrypted Record" as encryptedRecord1 {
+    + Encrypted Data
+}
+
+ENTITY IPFS {
+    + CID
+    + Encrypted Data
+}
+
+ENTITY BLOCKCHAIN {
+    + CID
+    + Encryption Key
+}
+
+Synthea --> consolidatedData : Consolidation (1)
+consolidatedData --> patientRecord1 : Split into Individual Records (2)
+patientRecord1 --> python : Process and Encrypt (3)
+python --> encryptedRecord1 : Encrypt with Fernet (4)
+encryptedRecord1 --> IPFS : Upload (5)
+IPFS --> python : Return CID (6)
+python -r-> BLOCKCHAIN : Store CID and Encryption Key (7)
+
+@enduml

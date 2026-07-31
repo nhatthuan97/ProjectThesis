@@ -1,0 +1,35 @@
+# --- Data (auto-downloaded by the baseline notebook; keep out of git) ---
+Code/data/*.csv
+
+# --- Python ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# --- LaTeX build artifacts ---
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.nav
+*.snm
+*.vrb
+
+# --- Compiled output PDFs (rebuilt from source; figure PDFs stay tracked) ---
+Disertation_at_Work/main.pdf
+Grant/main.pdf
+Weekly_Meeting_Report/weekly_meeting.pdf
+
+# --- Editor/OS noise ---
+.vscode/
+.DS_Store
