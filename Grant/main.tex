@@ -69,9 +69,9 @@ a real cohort of roughly 102{,}000 inpatient encounters (UCI Diabetes
 synthetic FHIR patient populations scaling the systems axis, where signal
 quality is irrelevant. The team has independently prototyped and
 published each constituent component, and has already executed the utility-axis
-measurement in preliminary form---confirming the central churn-regime
-hypothesis---giving strong feasibility evidence for the
-proposed integration and measurement.
+measurement---confirming the central churn-regime hypothesis and, via a
+model-capacity replication, its independence of the client model---giving
+strong feasibility evidence for the proposed integration and measurement.
 
 \medskip
 \noindent\textbf{Intellectual Merit.}
@@ -92,10 +92,12 @@ measurement and systems contribution, not a new learning algorithm, and is
 designed to surface \emph{non-obvious} findings---e.g., overhead thresholds
 beyond which per-round on-chain consent is infeasible, and the result that
 whole-silo departure damages utility far more than individual patient churn.
-Preliminary five-seed experiments on the primary cohort already support the
-latter: a whole-silo exit costs roughly six times the utility of transient
-churn, and a count-matched control isolates the damage to \emph{who} leaves
-rather than \emph{how many}.
+Executed five-seed experiments on the primary cohort already establish the
+latter: a positive-heavy whole-silo exit costs $-0.059$ AUROC against $-0.039$
+for a count-matched random control---isolating the damage to \emph{who} leaves
+rather than \emph{how many}---and a replication with a higher-capacity neural
+client reproduces every delta within noise, confirming the effect is a property
+of the problem rather than of the model.
 
 \medskip
 \noindent\textbf{Broader Impacts.}
@@ -222,8 +224,9 @@ not interchangeable---transient churn may be near-harmless because contributions
 re-enter, whereas whole-silo departure inflicts a non-IID shock that dominates
 all per-patient effects. \emph{Non-obvious target:} show that ``who leaves''
 matters more than ``how many leave,'' overturning the intuitive headcount model.
-\emph{Preliminary status: supported---a five-seed study on the primary cohort
-already separates the regimes and confirms the isolation test
+\emph{Status: confirmed---a five-seed study on the primary cohort separates the
+regimes and passes the isolation test, and an executed model-capacity
+replication (MLP client) reproduces the deltas within noise
 (\S\ref{sec:feas}).}
 
 \item[RQ3 (The frontier).] Where is the joint cost--utility frontier, and what
@@ -319,10 +322,16 @@ $-0.010$; whole-silo exit of the positive-heavy silo $-0.059$. The decisive
 comparison is a \textbf{count-matched isolation test}: removing the same number
 of patients as the positive-heavy silo exit, but drawn uniformly at random,
 costs only $-0.039$---so identity, not headcount, carries the damage,
-\emph{confirming H2 in preliminary form}. These results de-risk the utility
-axis entirely; the funded work scales it (higher-capacity averageable clients,
-calibration and significance testing per~\cite{tennis}), couples it to the
-systems axis, and assembles the frontier.
+\emph{confirming H2}. A subsequent \textbf{model-capacity replication} reran
+the entire churn grid with two clients on identical partitions and schedules
+(200 runs): the linear client, and a one-hidden-layer MLP (64 units) that
+centralizes at AUROC $0.670$, above the linear ceiling of $0.666$. Every delta
+matches within one standard deviation (positive-heavy silo exit $-0.064$ on the
+MLP vs.\ $-0.059$; count-matched control $-0.051$ vs.\ $-0.039$), so the
+churn-cost structure is model-independent and H2 survives the model swap.
+These results de-risk the utility axis entirely; the funded work scales it
+(finer rate sweeps, calibration and significance testing per~\cite{tennis}),
+couples it to the systems axis, and assembles the frontier.
 
 \section{Background and Related Work}
 \paragraph{Federated learning and its non-IID weakness.}
@@ -332,11 +341,11 @@ well documented~\cite{zhao}; FedProx~\cite{fedprox} and
 SCAFFOLD~\cite{scaffold} were designed to mitigate it. We treat FedAvg's non-IID
 sensitivity not as a flaw to engineer away but as the \emph{measurement
 instrument}: it is precisely what makes consent churn visible as a utility cost.
-Our preliminary five-method comparison (\S\ref{sec:prelim}) already shows the
+Our executed five-method comparison (\S\ref{sec:prelim}) already shows the
 aggregator choice is immaterial at $K{=}3$ short of pathological heterogeneity,
-so the Year-2 robustness check shifts to model capacity: replacing the linear
-averageable client with a small MLP to test whether degradation magnitudes are a
-linear-model artifact.
+and the model-capacity check has likewise been executed---an MLP averageable
+client reproduces the degradation magnitudes---so the Year-2 robustness check
+shifts to replication on real hospital silos (eICU).
 
 \paragraph{Blockchain $+$ FL in healthcare.}
 This is now a heavily reviewed area, but across it the blockchain's role is
@@ -439,11 +448,11 @@ slice of the distribution at once. (Preliminary: the dominant regime, $-0.059$
 for a positive-heavy silo under severe skew.)
 \end{enumerate}
 \emph{Deliverable:} the full powered degradation curves per regime with
-calibration and significance testing, extending the executed preliminary study
+calibration and significance testing, extending the executed study
 (\S\ref{sec:prelim}) that already confirms the H2 ``who leaves $>$ how many
-leave'' finding via its count-matched isolation test; funded work adds
-higher-capacity averageable clients (MLP), finer rate sweeps, and real-hospital
-silo replication (\S\ref{sec:data}).
+leave'' finding via its count-matched isolation test and its model-independence
+via the MLP replication; funded work adds finer rate sweeps, calibration and
+significance testing, and real-hospital silo replication (\S\ref{sec:data}).
 
 \subsection{Thrust 4 --- Multi-project consent \& the frontier (RQ3, RQ4)}
 Extend the consent layer to a patient~$\times$~study matrix at the
@@ -462,12 +471,12 @@ proposal's central scientific artifact.
 aggregation~\cite{secagg} as composable layers and measure the noise~$\rightarrow$
 accuracy cost as a third axis on the same frontier; this is the thrust that earns
 the word ``privacy.''
-\item \textbf{Robustness (Year 2).} The aggregator dimension is already closed
-in preliminary form---five methods compared, FedAvg justified
-(\S\ref{sec:prelim})---so robustness shifts to model capacity (a small MLP
-averageable client) and to replication on real hospital silos (eICU), testing
-whether Thrust-3 degradation magnitudes are artifacts of the linear client or of
-Dirichlet partitioning.
+\item \textbf{Robustness (Year 2).} Two robustness dimensions are already
+closed---the aggregator (five methods compared, FedAvg justified) and model
+capacity (an executed MLP replication reproduces every churn delta within
+noise, \S\ref{sec:prelim})---so robustness shifts to replication on real
+hospital silos (eICU), testing whether Thrust-3 degradation magnitudes are
+artifacts of Dirichlet partitioning.
 \item \textbf{Unlearning (stretch).} On permanent withdrawal, trigger federated
 unlearning~\cite{unlearning} of the revoked contribution and measure its
 cost---an open problem flagged but unaddressed by the prior consent-gating
@@ -527,11 +536,12 @@ benchmark.
 
 \section{Timeline and Management}\label{sec:timeline}
 \textbf{Year 1 (spine):} Thrust 1 testbed; Thrust 2 at Synthea scale; Thrust 3
-completed on the primary cohort (preliminary form already executed,
-\S\ref{sec:prelim}); first cost--utility curves and the three-regime churn
-finding---this is the
+completed on the primary cohort (already executed, including the
+model-capacity replication, \S\ref{sec:prelim}); first cost--utility curves and
+the three-regime churn finding---this is the
 PhD dissertation's core. \textbf{Year 2:} Thrust 4 multi-project consent and the
-frontier; Thrust 5 privacy (DP/secure-agg) and robustness (FedProx/SCAFFOLD).
+frontier; Thrust 5 privacy (DP/secure-agg) and robustness (eICU real-silo
+replication).
 \textbf{Year 3:} Thrust 5 images (SipakMed), unlearning stretch goal, mCODE
 conformance, open release and dissemination. The PI coordinates; a graduate
 research assistant leads implementation; undergraduates contribute to data and
