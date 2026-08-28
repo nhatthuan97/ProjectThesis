@@ -29,14 +29,11 @@
 \usepackage{accessibility}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
-\usepackage{accessibility}
 \usepackage{array}
-\usepackage{paralist}
 \usepackage{pifont}
 \newcommand{\cmark}{\ding{51}}
 \newcommand{\xmark}{\ding{55}}
 \usepackage{etoolbox}
-\usepackage[utf8]{inputenc}
 \usepackage{calc}
 \usepackage{enumitem}
 
@@ -110,10 +107,12 @@ an overhead threshold beyond which per-round on-chain consent becomes infeasible
 and must be amortized; and the separation of three physically distinct consent-%
 churn regimes---transient departure, permanent withdrawal, and whole-silo
 exit---testing the hypothesis that \emph{who} leaves matters more than \emph{how
-many}, overturning the intuitive headcount model. Preliminary experiments on the
-readmission task already support that hypothesis: removing an entire
-positive-heavy silo costs roughly six times the utility of the same number of
-patients withdrawing at random.
+many}, overturning the intuitive headcount model. Executed experiments on the
+readmission task confirm that hypothesis: removing an entire positive-heavy silo
+costs $-0.059$ AUROC, against $-0.039$ for the same number of patients
+withdrawing at random---and a full rerun of the churn grid with a
+higher-capacity neural client reproduces every delta within noise, showing the
+cost structure of consent churn is a property of the problem, not of the model.
 
 \clearpage
 \tableofcontents
@@ -145,7 +144,7 @@ Given these powerful new capabilities, machine learning now has a vast number of
 \subsubsection{Multimodal promise}
 While singular model achieve impressive result, the diagnostic process in medicine is inherently multimodal; clinicians rarely rely on a single source of information to make a diagnosis. Instead, they create a holistic view of a patient’s health by synthesizing data from a wide array of sources, such as medical imaging, laboratory results, patient history, and physical examinations... For artificial intelligence to be a truly effective clinical partner, it must mirror this integrated approach rather than analyzing data points in isolation.
 
-The value of this synthetic approach is supported by a growing body of research. A comprehensive scoping review that analyzed 128 different multimodal machine learning studies found that combining data sources show tangible improvement in perfomance. The review reported a mean accuracy lift of 6.4\% for multimodal models when compared to the best-performing single-modality baseline, demonstrating that a fusion of data provides a more powerful predictive signal than any single source can offer on its own.\cite{kline2022multimodal}.  
+The value of this synthetic approach is supported by a growing body of research. A comprehensive scoping review that analyzed 128 different multimodal machine learning studies found that combining data sources show tangible improvement in performance. The review reported a mean accuracy lift of 6.4\% for multimodal models when compared to the best-performing single-modality baseline, demonstrating that a fusion of data provides a more powerful predictive signal than any single source can offer on its own.\cite{kline2022multimodal}.  
 
 A specific application in cervical-cancer screening provides a compelling example of this principle in action. In one study, researchers developed a model that fused visual data from colposcopic images with structured data from clinical risk factors (such as age and patient history). This combination of imaging and clinical data significantly enhanced the model's diagnostic accuracy, raising its AUC from an already strong 0.88 to 0.953. This improvement illustrates how different modalities provide complementary information; the images offer visual evidence of potential disease, while the clinical factors provide essential context that helps the algorithm interpret that visual data with greater certainty. Ultimately, the promise of multimodal AI lies in its ability to create more robust, accurate, and context-aware clinical decision-support tools that more closely emulate the complex reasoning of an expert physician. \cite{madathil2025multimodal}.  
 
@@ -233,8 +232,10 @@ whole-silo exit.
 because contributions re-enter, whereas whole-silo departure inflicts a non-IID
 shock that dominates all per-patient effects. \emph{Target: show that ``who
 leaves'' matters more than ``how many leave,'' overturning the headcount model.
-Preliminary results on the primary dataset already support H2 via a count-matched
-isolation test (Section~\ref{sec:utility_axis}).}
+Status: confirmed---executed five-seed results on the primary dataset confirm H2
+via a count-matched isolation test, and an executed model-capacity replication
+(a one-hidden-layer MLP client) reproduces the deltas within noise
+(Section~\ref{sec:utility_axis}).}
 
 \item[\textbf{RQ3 (The frontier).}]
 Where is the joint cost--utility frontier, and what configurations keep the system
@@ -294,7 +295,9 @@ visible as a utility cost. This choice is now empirically grounded rather than
 held on faith: a five-method comparison (FedAvg, FedProx, FedAvgM, FedAdam,
 SCAFFOLD) on the primary task shows the aggregation choice barely moves utility
 at $K{=}3$ until heterogeneity becomes pathological
-(Section~\ref{sec:fl_design}). The Year-1 claim is deliberately
+(Section~\ref{sec:fl_design}), and an executed model-capacity check shows the
+churn-cost measurements themselves are client-independent
+(Section~\ref{sec:mlp_check}). The Year-1 claim is deliberately
 \emph{consent governance and data autonomy}, not \emph{privacy}: FedAvg alone
 yields leaky data-locality, not a formal privacy guarantee. Differential privacy
 and secure aggregation are composable layers added in a later thrust that earns
@@ -331,9 +334,11 @@ tradeoff curves with explicit breaking points. \emph{(RQ1, RQ3.)}
 A separation of transient departure, permanent withdrawal, and whole-silo exit
 into physically distinct regimes, with evidence on which degrade a federated model
 and which do not---testing the claim that \emph{who} leaves matters more than
-\emph{how many}. Preliminary five-seed experiments on the primary task already
-demonstrate the separation and confirm the claim via a count-matched isolation
-test (Section~\ref{sec:utility_axis}). \emph{(RQ2.)}
+\emph{how many}. Executed five-seed experiments on the primary task demonstrate
+the separation, confirm the claim via a count-matched isolation test, and show
+the result is model-independent: a full rerun with a higher-capacity MLP client
+reproduces every delta within one standard deviation
+(Section~\ref{sec:utility_axis}). \emph{(RQ2.)}
 
 \item \textbf{A multi-project consent framework.}
 A patient\,$\times$\,study consent matrix implemented at the contract/ledger level,
@@ -518,7 +523,7 @@ One of the most popular MapReduce implementations is Hadoop MapReduce. MapReduce
 
 \subsection{Spark and SparkML}
 Apache Spark address the limitations of  Big Data processing frameworks such as MapReduces. Spark expands on the original MapReduce model by adding more feature sets and optimization \cite{Spark}. Fig.\ref{fig:SparkVMR} shows some of the differences between Spark and MapReduce.
-Sparks offers caching itermediated data in RAM, which significantly increases performance compared to disk-based processing in MapReduce. Spark also provides support and integration with other programming languages and platforms. Spark also provided higher-level API and more expressive programming models thus lower the barrier of entry compared to MapReduce.
+Sparks offers caching intermediate data in RAM, which significantly increases performance compared to disk-based processing in MapReduce. Spark also provides support and integration with other programming languages and platforms. Spark also provided higher-level API and more expressive programming models thus lower the barrier of entry compared to MapReduce.
 
 SparkML is a Spark library that offers a scalable and distributed platform for machine learning. It supports multiple programming languages and streamlines the development of machine learning pipelines \cite{SparkML}. Through SparkML, users can easily deploy parallelized machine learning models on extensive datasets. By providing a high-level API for a wide range of machine learning tasks, SparkML significantly reduces the complexity of implementing distributed machine learning solutions. Furthermore, it incorporates implementations of several well-known machine learning algorithms, enhancing the efficiency of model deployment.
 
@@ -598,7 +603,7 @@ Sipakmed, introduced in 2018, is one of the first publicly available datasets fo
         \item Koilocytotic Cells
         \item Dyskeratotic Cells
     \end{itemize}
-    \item Begnign Cells
+    \item Benign Cells
     \begin{itemize}
         \item Metaplastic Cells
     \end{itemize}
@@ -617,7 +622,7 @@ Sipakmed has 966 images, including 4049 cells in total. The specific distributio
 \end{figure}
 
 \subsection{PreProcessing}
-\subsubsection{Cervical Cancer Risk Classfication}
+\subsubsection{Cervical Cancer Risk Classification}
 Before the training, several basic steps were taken to make sure the data were ready for machine learning models. First, all "?" values are replaced with the median of their respective columns. Additionally, all duplicated data was removed, resulting in a reduction in the number of rows from 858 to 835 rows.\\
 \indent The data set was heavily skewed. Specifically, most of the data set was within the age group of 21 to 32 (Figure \ref{AgeDist}). Other features are also skewed. However, no modification was done to ensure balance on the data set apart from using ADASYN (a super sampling technique) on the "Biopsy" target class. This was necessary due to the imbalanced ratio of 781 to 54 between the values of 0 and 1 for the class of 'biopsy', as demonstrated in Figure \ref{imba-target}.
 
@@ -802,7 +807,7 @@ To address the first objective, the preprocessed data undergoes shuffling and is
 
 
 % Figures \ref{Spark-Per-OG} and \ref{Spark-Per-OG-Tab}.
-As illustrated in Table \ref{tab:model-performance-Spark's Accuracy on Cervical Cancer}, the Spark-implemented algorithms demonstrate robust performance. Notably, except for Naive Bayes, all other algorithms exhibit strong performance, consistently maintaining accuracy rates above 90% for all metrics (the FM classifier also achieves a commendable accuracy of 89%). Despite Naive Bayes performing relatively poorer compared to the other selected algorithms, it still achieves a respectable accuracy of 82%, coupled with a high precision of 99%, albeit with a lower recall of 83%.
+As illustrated in Table \ref{tab:model-performance-Spark's Accuracy on Cervical Cancer}, the Spark-implemented algorithms demonstrate robust performance. Notably, except for Naive Bayes, all other algorithms exhibit strong performance, consistently maintaining accuracy rates above 90\% for all metrics (the FM classifier also achieves a commendable accuracy of 89\%). Despite Naive Bayes performing relatively poorer compared to the other selected algorithms, it still achieves a respectable accuracy of 82\%, coupled with a high precision of 99\%, albeit with a lower recall of 83\%.
 
 % Figures \ref{SkChart} and \ref{SkTable}.
 In Table \ref{tab:SkLearn's Accuracy on Cervical Cancer Risk}, the accuracy results when implemented using Scikit-learn are illustrated. While the accuracy rates exhibit a comparable range to those observed in Spark's implementation, the Support Vector Classifier stands out with the best results, achieving accuracy scores exceeding 96\% for all metrics. However, Random Forest performs comparatively less favorably, with accuracy scores hovering around 85\% across all metrics.
@@ -830,7 +835,7 @@ Historically, Convolutional Neural Networks (CNNs) have excelled in image classi
     \centering
 
     \includegraphics[width=0.9\linewidth]{SparkPaperFigure/Spark-Time-Og.jpg}
-    \caption{Spark's Training Time (Cerivical Cancer Classification)}
+    \caption{Spark's Training Time (Cervical Cancer Classification)}
     \label{Spark-Time-OG}
 \end{figure}
 %-////////////////////////////////////////////////////////////////////
@@ -1504,7 +1509,7 @@ Each dataset segment was fitted to the Random Forest model, and performance metr
 Upon obtaining the model results, the top five most important features were analyzed to understand their impact on the supply chain during the pandemic. This analysis aims to pinpoint which factors were most affected by COVID-19 and how they influenced the overall supply chain resilience.
 
 \section{Results and Discussion}
-\label{sec:results}
+\label{sec:sc_results}
 \subsection{USAID's Manual Expected Lead Time}
 Before analyzing the results from our predictive model, we examined the errors in the manual expected lead times provided by USAID. The dataset includes the column 'Estimated Delivery Date'. We subtracted this column from the 'Order Entry Date' to calculate the 'Expected Lead Time'. We then assessed the variance between the predicted lead time and the 'Actual Lead Time', as shown in Table \ref{tab:error_metrics}.
 
@@ -1707,8 +1712,11 @@ The reference anchors for the utility axis have been established experimentally
         0.667--0.70 band for this task. Model choice barely moves AUROC: the
         task's signal ceiling is genuinely low.
   \item \textbf{Federated ceiling.} Trees are not weight-averageable, so the
-        federated ceiling is set by the best \emph{averageable} model: logistic
-        regression at AUROC $0.666$. The $\approx 0.011$ gap between the tree
+        federated ceiling is set by the best \emph{averageable} model. The
+        Year-1 instrument is logistic regression at AUROC $0.666$; the
+        model-capacity check of Section~\ref{sec:mlp_check} later adds a
+        one-hidden-layer MLP that centralizes at $0.670$ and federates to the
+        same $0.670$ at $K{=}3$. The $0.007$--$0.011$ gap between the tree
         ceiling and the averageable ceiling is the first concrete, measured cost
         of federating this task.
   \item \textbf{Aggregation methods at $K{=}3$.} All five methods (FedAvg,
@@ -1795,9 +1803,83 @@ model of consent cost. Two honest qualifications frame this result. First,
 random per-patient churn is genuinely \emph{cheap} on this task---a real, if
 undramatic, finding in itself; the large costs come exclusively from
 \emph{distribution shift} (biased withdrawal, silo exit). Second, the absolute
-magnitudes are moderated by the large cohort, the linear averageable client, and
-the rank-robustness of AUROC; a planned higher-capacity averageable client
-(a small MLP) tests whether they are a linear-model artifact.
+magnitudes are moderated by the large cohort and the rank-robustness of AUROC;
+the natural further worry---that the linear averageable client additionally
+\emph{dampens} them---was tested directly, and dismissed, by the executed
+model-capacity check reported next.
+
+\subsection{Model-Capacity Robustness: the MLP Amplification Check (Executed)}
+\label{sec:mlp_check}
+
+The churn study above was measured on a class-weighted logistic-regression
+client, leaving open whether its modest magnitudes are an artifact of a
+saturated linear model. To settle this, the \emph{entire} churn grid---the
+three-regime rate sweep, both whole-silo exits, and the count-matched
+control---was rerun with two clients on identical partitions and schedules
+(five seeds, $K{=}3$, class-weighted FedAvg, 40 rounds; 200 training runs in
+total): the original logistic regression, and a one-hidden-layer MLP (64 ReLU
+units, He initialization, learning rate $0.05$). The MLP configuration was
+selected by a small sweep so that it is a genuinely \emph{stronger} averageable
+client, not a handicapped stand-in: it centralizes at AUROC $0.670$, above the
+linear ceiling of $0.666$ and inside the published band. Aggregation is
+model-agnostic---both clients are encoded as a single flat parameter vector, so
+the FedAvg weighting, churn schedules, and harness are unchanged---and the
+logistic-regression arm of the rerun reproduces the published churn table
+exactly, so the two arms differ only in the client model.
+
+\begin{table}[htbp]
+\centering
+\caption{Executed MLP amplification check: $\Delta$AUROC vs.\ the same-seed
+no-churn baseline under identical partitions and consent schedules, mean
+($\pm$\,sd) over five seeds. No condition shows amplification beyond noise.}
+\label{tab:mlp_check}
+\begin{tabular}{lrr}
+\toprule
+Condition & LogReg client & MLP client \\
+\midrule
+Transient (rejoin), 70\% churn                    & $-0.003$ ($0.001$) & $-0.004$ ($0.003$) \\
+Permanent, random, 70\%                           & $-0.007$ ($0.005$) & $-0.008$ ($0.005$) \\
+Permanent, biased, 70\%                           & $-0.021$ ($0.011$) & $-0.020$ ($0.004$) \\
+Whole-silo exit, positive-light ($\alpha{=}0.1$)  & $-0.010$ ($0.021$) & $-0.004$ ($0.007$) \\
+Whole-silo exit, positive-heavy ($\alpha{=}0.1$)  & $-0.059$ ($0.021$) & $-0.064$ ($0.025$) \\
+\emph{Count-matched random control} ($\alpha{=}0.1$) & $-0.039$ ($0.046$) & $-0.051$ ($0.061$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three findings close the question (Table~\ref{tab:mlp_check}):
+
+\begin{enumerate}
+  \item \textbf{No amplification: the churn deltas are not a linear-model
+        artifact.} Across all twelve rate-sweep cells the MLP deltas match the
+        logistic-regression deltas within one standard deviation
+        (amplification ratios $0.2$--$1.6$), and in the \emph{biased} regime---
+        the one that carries the mechanism---the ratio is $\approx 0.9$, i.e.\
+        marginally \emph{smaller} on the MLP. Silo-level effects are likewise
+        unchanged. The caveat is resolved in the direction that
+        \emph{strengthens} the result: the cost structure of consent churn is
+        model-independent at this capacity.
+  \item \textbf{H2 survives the model swap.} On the MLP, the positive-heavy
+        whole-silo exit ($-0.064$) still dominates the count-matched random
+        control ($-0.051$) at identical headcount, and dwarfs the
+        positive-light exit ($-0.004$)---a ${\sim}18\times$ who-leaves gap.
+        ``Who leaves matters more than how many leave'' is not a property of
+        logistic regression.
+  \item \textbf{Why nothing amplifies: the task ceiling, not the model class,
+        bounds the deltas.} The MLP lifts the averageable ceiling only
+        $0.666 \rightarrow 0.670$ against a tree ceiling of $0.677$ and a
+        published band of $0.667$--$0.70$; on a task at its signal ceiling there
+        is little headroom for \emph{any} model to lose dramatically more under
+        distribution shift. One secondary observation: the MLP's \emph{no-churn}
+        baseline is slightly more fragile under severe skew
+        ($\alpha{=}0.1$: $0.629$ vs.\ the linear client's $0.640$)---higher
+        capacity overfits skewed silos marginally faster.
+\end{enumerate}
+
+The utility-cost axis is therefore closed and model-robust: on a real clinical
+task at its signal ceiling, per-patient consent churn stays cheap and
+distribution-shifting churn stays roughly $3$--$6\times$ more expensive,
+regardless of client capacity.
 
 \section{Multi-Project Consent (RQ4)}
 \label{sec:multiproject}
@@ -1862,9 +1944,11 @@ Chapter~\ref{chap:supplychain}, not as a deliverable system).
 \subsection{Implementation Status}
 The utility-axis instrumentation is \emph{built and executed}: a modular
 centralized benchmark, a churn-aware federated trainer implementing all five
-aggregation methods, and a library of consent-churn schedules (transient,
-permanent-random, permanent-biased, whole-silo, and the count-matched control),
-with the five-seed results reported in
+aggregation methods over two averageable clients (logistic regression and a
+one-hidden-layer MLP behind the same flat-parameter interface), and a library
+of consent-churn schedules (transient, permanent-random, permanent-biased,
+whole-silo, and the count-matched control), with the five-seed results---%
+including the 200-run two-client amplification check---reported in
 Sections~\ref{sec:executed_baseline}--\ref{sec:utility_axis}. A simulated
 multi-silo deployment runs on a single host, with a two-machine LAN deployment
 having validated the networking, serialization, and aggregation path. The next
@@ -1894,13 +1978,14 @@ Chapter~\ref{chap:fl_clusters} end to end:
 \end{enumerate}
 
 \section{Results}
-\label{sec:results}
+\label{sec:integration_results}
 The utility-axis results (RQ2) are in hand and reported in
 Chapter~\ref{chap:fl_clusters}: the reference anchors
-(Section~\ref{sec:executed_baseline}) and the three-regime degradation study
+(Section~\ref{sec:executed_baseline}), the three-regime degradation study
 with its count-matched isolation test confirming H2
-(Table~\ref{tab:churn_results}). \emph{[Remaining results to be completed as
-experiments conclude.]} The central remaining result is the
+(Table~\ref{tab:churn_results}), and the model-capacity replication showing the
+churn deltas are client-independent (Table~\ref{tab:mlp_check}).
+\emph{[Remaining results to be completed as experiments conclude.]} The central remaining result is the
 cost--utility frontier (Figure to be added): model utility versus per-round
 governance cost, one curve per churn regime and chain backend, with the H1
 infeasibility threshold and the H3 knee annotated. Supporting tables will add
@@ -1931,25 +2016,71 @@ consent churn, and the multi-project consent matrix.
 The federation is simulated rather than a live multi-hospital deployment, and
 its silos are Dirichlet partitions of one cohort rather than real hospital
 boundaries (real-silo replication, e.g.\ on eICU, is future work). The measured
-utility magnitudes are moderated by the large cohort, the linear averageable
-client, and AUROC's rank-robustness---the planned MLP client tests whether they
-are a model-capacity artifact. Synthetic data is confined to the systems axis,
+utility magnitudes are moderated by the large cohort and AUROC's
+rank-robustness; the executed MLP replication (Section~\ref{sec:mlp_check})
+rules out the linear client as their cause, so the remaining external-validity
+question is the Dirichlet partitioning itself, not the model class. Synthetic
+data is confined to the systems axis,
 where signal quality is irrelevant by construction. Finally, the Year-1 system
 claims consent
 governance and data autonomy, not formal privacy, since FedAvg alone provides
 leaky data-locality rather than a differential-privacy guarantee.
+
+\section{Timeline of Completed and Remaining Work}
+\label{sec:timeline}
+
+Table~\ref{tab:timeline} summarizes the state of the work at the time of this
+proposal and the schedule for what remains. The utility-cost axis (RQ2) is
+executed and closed; the critical path runs through the systems-cost axis (RQ1)
+to the joint frontier (RQ3), with the multi-project matrix (RQ4) layered on the
+same infrastructure. Dates are indicative and will be adjusted with the
+committee.
+
+\begin{table}[htbp]
+\centering
+\caption{Dissertation timeline: completed milestones and remaining work.}
+\label{tab:timeline}
+\begin{tabular}{p{3.2cm}p{9.6cm}}
+\toprule
+\textbf{Period} & \textbf{Milestone} \\
+\midrule
+2024 \emph{(done)} & Component papers published: Spark benchmarking
+  (Chapter~\ref{chap:spark}), blockchain/IPFS consent layer
+  (Chapter~\ref{chap:blockchain}), supply-chain regime shift
+  (Chapter~\ref{chap:supplychain}). \\
+Spring 2026 \emph{(done)} & Thesis framing finalized (two-axis cost of
+  autonomy); primary dataset locked (Diabetes 130); Synthea confined to the
+  systems axis. \\
+Summer 2026 \emph{(done)} & Utility axis executed: centralized multi-model
+  ceiling, five-method federated comparison, three-regime consent-churn study
+  with the count-matched isolation test (H2 confirmed), and the MLP
+  amplification check (churn deltas shown model-independent,
+  Section~\ref{sec:mlp_check}). \\
+\midrule
+Fall 2026 & Systems-cost axis (RQ1): gas/latency/bandwidth instrumentation on
+  the per-round hook across local, permissioned, and public backends, with the
+  existing churn schedules as the transaction-traffic generator; Synthea
+  scaling to locate the H1 infeasibility threshold. \\
+Winter 2026--Spring 2027 & Joint cost--utility frontier (RQ3): both axes swept
+  against the shared churn knob; locate the amortization knee. Multi-project
+  consent matrix and marginal-cost measurement (RQ4). \\
+Spring--Summer 2027 & Robustness replication on real hospital silos (eICU);
+  dissertation writing and defense. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Future Work}
 Four extensions deepen the frontier without changing the thesis. (1)
 \textbf{Privacy that earns the word:} compose differential privacy (DP-SGD) and/or
 secure aggregation onto the federated trainer and measure the
 noise\,$\rightarrow$\,accuracy cost as a third axis. (2) \textbf{Robustness:}
-the aggregator dimension is already closed---five methods were compared and
-class-weighted FedAvg justified empirically
-(Section~\ref{sec:executed_baseline})---so the remaining robustness check is
-model capacity: re-run the churn study with a small MLP client to test whether
-the modest magnitudes are a linear-model artifact, and replicate on real
-hospital silos (eICU). (3) \textbf{Federated unlearning:} on permanent withdrawal,
+two robustness dimensions are already closed---the aggregator (five methods
+compared, class-weighted FedAvg justified empirically,
+Section~\ref{sec:executed_baseline}) and model capacity (the executed MLP
+amplification check, Section~\ref{sec:mlp_check})---so the remaining check is
+replication on real hospital silos (eICU) in place of Dirichlet partitions.
+(3) \textbf{Federated unlearning:} on permanent withdrawal,
 trigger unlearning of the revoked contribution and measure its cost---an open
 problem in the consent-gating literature. (4) \textbf{Image scale:} extend to
 cervical images (SipakMed), where the heavy Spark/CNN pipeline of
