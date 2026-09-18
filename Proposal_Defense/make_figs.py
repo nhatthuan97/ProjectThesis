@@ -16,7 +16,7 @@ Outputs (figures/):
     mlp_deltas.png         logreg vs MLP paired deltas (amplification check)
 
 Palette: ink #2B2D33, coral #E4572E, teal #1B998B, gray #6B7280.
-Run:  conda run -n thesis python Proposal_Defense/make_figs.py
+Run:  ~/venvs/ds/bin/python Proposal_Defense/make_figs.py
 """
 import json
 from pathlib import Path

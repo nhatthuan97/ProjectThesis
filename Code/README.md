@@ -8,6 +8,8 @@ link to the **shared `data/` folder** as the single source of raw data.
 Code/
   data/                          # shared raw data (git-ignore the big files)
     diabetes_raw.csv             # UCI Diabetes 130-US-hospitals (auto-downloaded)
+  experiment_setup.py            # shared: split/standardise + Dirichlet silo
+                                 #   partition -- one definition for all parts
   01_baseline_fullscale/
     baseline_full_scale_accuracy.ipynb       # exploratory: ceiling/floor/FedAvg + non-IID sweeps
     baseline_and_federated_methods.ipynb     # FULL: multi-model baseline + 5 FL methods @ K=3
