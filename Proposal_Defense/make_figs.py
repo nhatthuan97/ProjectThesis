@@ -2,8 +2,8 @@
 
 All figures are regenerated from the executed result files, so the deck never
 carries hand-typed numbers:
-    ../Code/01_baseline_fullscale/best_single_baseline_results.json
-    ../Code/02_consent_churn/mlp_amplification_results.json
+    ../results/best_single_baseline_results.json
+    ../results/mlp_amplification_results.json
 The five-method federated table is transcribed from the executed notebook
 (baseline_and_federated_methods.ipynb, cell 12) since it is not written to JSON.
 
@@ -30,14 +30,12 @@ INK, CORAL, TEAL, GRAY, MUTED = "#2B2D33", "#E4572E", "#1B998B", "#6B7280", "#9C
 BAND = "#E5E7EB"
 
 HERE = Path(__file__).resolve().parent
-FIG = HERE / "figures"
-FIG.mkdir(exist_ok=True)
-CODE = HERE.parent / "Code"
+RESULTS = HERE.parent / "results"          # generated artifacts live in one place
+FIG = RESULTS / "figures"
+FIG.mkdir(parents=True, exist_ok=True)
 
-base = json.loads((CODE / "01_baseline_fullscale"
-                   / "best_single_baseline_results.json").read_text())
-res = json.loads((CODE / "02_consent_churn"
-                  / "mlp_amplification_results.json").read_text())
+base = json.loads((RESULTS / "best_single_baseline_results.json").read_text())
+res = json.loads((RESULTS / "mlp_amplification_results.json").read_text())
 s = res["summary"]
 
 plt.rcParams.update({

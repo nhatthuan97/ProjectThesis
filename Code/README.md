@@ -8,22 +8,36 @@ link to the **shared `data/` folder** as the single source of raw data.
 Code/
   data/                          # shared raw data (git-ignore the big files)
     diabetes_raw.csv             # UCI Diabetes 130-US-hospitals (auto-downloaded)
-  experiment_setup.py            # shared: split/standardise + Dirichlet silo
-                                 #   partition -- one definition for all parts
+  experiment_setup.py            # shared: split/standardise, Dirichlet silo
+                                 #   partition, and the results/ location
   01_baseline_fullscale/
     baseline_full_scale_accuracy.ipynb       # exploratory: ceiling/floor/FedAvg + non-IID sweeps
     baseline_and_federated_methods.ipynb     # FULL: multi-model baseline + 5 FL methods @ K=3
     best_single_baseline.py                  # module: preprocessing + multi-model CV benchmark
     federated_methods.py                     # module: FL methods, logreg + MLP flat-vector clients
-    best_single_baseline_results.json        # saved centralized model ranking
   02_consent_churn/
     churn.py                                 # module: consent-churn schedules + runner
     consent_churn_study.ipynb                # FULL: 3-regime churn study, 5 seeds, H2 test
     mlp_amplification_study.py               # runner: full churn grid on logreg AND MLP clients
     mlp_amplification.ipynb                  # results + findings of the amplification check
-    mlp_amplification_results.json           # saved per-run metrics (200 runs)
   ...                            # (later) 03_blockchain_consent/ ...
 ```
+
+Generated artifacts do NOT live here. Every script writes into `../results/`:
+
+```
+results/
+  best_single_baseline_results.json   # centralized model ranking
+  mlp_amplification_results.json      # 200 per-run metrics
+  figures/                            # built by Proposal_Defense/make_figs.py
+assets/                               # static figures from the published papers
+```
+
+Every LaTeX document reads `../results/figures/` and `../assets/` through its
+`\graphicspath`, so rerunning an experiment and then `make_figs.py` updates the
+dissertation, the proposal defense and the weekly deck with nothing copied by
+hand. That is also why nothing under `results/` should ever be edited directly.
+
 
 ## Environment
 

@@ -36,8 +36,14 @@ from distribution shift, not headcount.
 
 | Folder | Contents |
 |---|---|
-| `Code/` | Experiments. `01_baseline_fullscale`: centralized multi-model baseline + five FL aggregation methods (FedAvg/FedProx/FedAvgM/FedAdam/SCAFFOLD). `02_consent_churn`: the three-regime consent-churn study. See `Code/README.md` for environment setup. |
-| `Disertation_at_Work/` | Dissertation proposal (`main.tex`) and figures from the published component papers (Spark benchmarking, blockchain/IPFS consent layer, COVID supply-chain study). |
+| `Code/` | Experiments, and only experiments. `01_baseline_fullscale`: centralized multi-model baseline + five FL aggregation methods (FedAvg/FedProx/FedAvgM/FedAdam/SCAFFOLD). `02_consent_churn`: the three-regime consent-churn study. `experiment_setup.py` holds the one definition of the data split and the silo partition. See `Code/README.md` for environment setup. |
+| `results/` | Everything generated: the metric JSONs the experiments write, and `figures/` built from them by `Proposal_Defense/make_figs.py`. Never edited by hand. |
+| `assets/` | Static figures from the published component papers (Spark benchmarking, blockchain/IPFS consent layer, COVID supply-chain study). Inputs, not outputs. |
+| `Disertation_at_Work/` | Dissertation proposal (`main.tex`) and its bibliography. |
+
+Every LaTeX document pulls figures from `results/figures/` and `assets/` via
+`\graphicspath`, so there is exactly one copy of each figure and rerunning an
+experiment propagates to every document.
 
 ## Status
 
