@@ -25,13 +25,40 @@ Code/
 
 ## Environment
 
+Runs on itx-box in the `ds` virtualenv (`~/venvs/ds`), which also backs the
+JupyterLab server and the "Python (ds)" kernel. `requirements.txt` pins the
+versions the archived results were last verified against.
+
 ```bash
-conda create -n thesis python=3.11 -y
-conda run -n thesis pip install numpy pandas scikit-learn scipy matplotlib \
-    ucimlrepo jupyterlab nbformat nbconvert ipykernel
-conda run -n thesis python -m ipykernel install --user --name thesis \
-    --display-name "Python (thesis)"
+python3 -m venv ~/venvs/ds
+~/venvs/ds/bin/pip install -r requirements.txt
+~/venvs/ds/bin/python -m ipykernel install --user --name ds \
+    --display-name "Python (ds)"
 ```
+
+**Python 3.14 note.** On Linux, Python 3.14 changed the default multiprocessing
+start method from `fork` to `forkserver`. `02_consent_churn/mlp_amplification_study.py`
+shares the preloaded design matrix with its workers through a module-level
+global, so it explicitly requests a `fork` context; under `forkserver` the
+workers re-import the module and see an empty global. Keep that context if you
+touch the runner.
+
+### Verified reproduction (2026-09-18)
+
+Rerun end to end on Python 3.14.7 / NumPy 2.5.3 / pandas 3.0.5 / scikit-learn
+1.9.1 / XGBoost 3.4.1 / LightGBM 4.7.0:
+
+| Artifact | Result |
+|---|---|
+| `mlp_amplification_results.json` (200 runs) | **byte-identical** to the archived copy |
+| `federated_methods.py` | reproduces the flat method comparison and the SCAFFOLD collapse at alpha=0.1 (AUROC 0.6246) |
+| `churn.py` | reproduces the regime ordering |
+| `best_single_baseline_results.json` | reproduces except **XGBoost AUROC 0.676882 -> 0.676166** (-7.2e-04) under XGBoost 3.4.1 |
+
+The XGBoost drift is a library-version effect, an order of magnitude below that
+model's own CV standard deviation (+/-0.0064). It does not move the ranking, the
+selected model, or the tuned threshold, all of which reproduce exactly. The
+committed JSON is kept as the archived artifact rather than being overwritten.
 
 ## Data convention
 
