@@ -36,6 +36,7 @@ FIG.mkdir(parents=True, exist_ok=True)
 
 base = json.loads((RESULTS / "best_single_baseline_results.json").read_text())
 res = json.loads((RESULTS / "mlp_amplification_results.json").read_text())
+NSEED = len(res["config"]["seeds"])   # label from the data, never hard-coded
 s = res["summary"]
 
 plt.rcParams.update({
@@ -206,7 +207,7 @@ ax.axvline(0, color=MUTED, lw=1, zorder=1)
 ax.set_yticks(ys, [c[0] for c in conds])
 ax.set_xlim(-0.095, 0.014)
 ax.set_ylim(-0.55, 2.95)
-ax.set_xlabel("$\\Delta$AUROC vs no-churn baseline  ($\\alpha$=0.1, 5 seeds, mean $\\pm$ sd)")
+ax.set_xlabel(f"$\\Delta$AUROC vs no-churn baseline  ($\\alpha$=0.1, {NSEED} seeds, mean $\\pm$ sd)")
 ax.tick_params(axis="y", length=0)
 ax.spines["left"].set_visible(False)
 # bracket the two conditions that remove the SAME headcount: heavy exit (y=2)
@@ -216,7 +217,12 @@ ax.annotate("", xy=(-0.083, 2.0), xytext=(-0.083, 1.0),
                             connectionstyle="bar,fraction=0.14"))
 ax.text(-0.0905, 1.5, "same\nheadcount\nremoved", ha="center", va="center",
         fontsize=10, color=INK, fontweight="bold")
-ax.text(-0.070, 2.62, "identity of who leaves  →  1.5$\\times$ the damage",
+# ratio computed from the data -- a hard-coded multiplier silently goes stale
+# the moment the seed count or any condition changes.
+_hv = abs(s["logreg"]["whole_silo_heavy_a0.1"][0])
+_mv = abs(s["logreg"]["matched_a0.1"][0])
+_ratio = _hv / _mv if _mv else float("nan")
+ax.text(-0.070, 2.62, f"identity of who leaves  →  {_ratio:.1f}$\\times$ the damage",
         ha="center", va="center", fontsize=11.5, color=CORAL, fontweight="bold")
 save(fig, "isolation.png")
 
@@ -258,7 +264,7 @@ ax.axvline(0, color=MUTED, lw=1, zorder=1)
 ax.set_yticks(range(len(conds2)), [c[0] for c in reversed(conds2)])
 ax.set_xlim(-0.145, 0.022)
 ax.set_ylim(-0.62, 6.05)
-ax.set_xlabel("$\\Delta$AUROC vs same-seed no-churn baseline (5 seeds, mean $\\pm$ sd)")
+ax.set_xlabel(f"$\\Delta$AUROC vs same-seed no-churn baseline ({NSEED} seeds, mean $\\pm$ sd)")
 ax.tick_params(axis="y", length=0)
 ax.spines["left"].set_visible(False)
 handles = [plt.Rectangle((0, 0), 1, 1, color=GRAY),
