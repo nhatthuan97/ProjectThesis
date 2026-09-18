@@ -87,6 +87,6 @@ Keep raw data out of version control (see `.gitignore`).
 
 | Folder | What it does | Status |
 |---|---|---|
-| `01_baseline_fullscale` | Multi-model centralized baseline (at published SOTA, AUROC ~0.677) + five FL averaging methods (FedAvg/FedProx/FedAvgM/FedAdam/SCAFFOLD) compared across 3 silos and IID→severe non-IID. Establishes the ceiling/floor/federated reference anchors. No consent churn yet. | done |
+| `01_baseline_fullscale` | Multi-model centralized baseline (AUROC 0.677, at the top of the published band for this dataset: 0.64-0.688 across Liu 2024 / Emi-Johnson 2025 / Salim 2026 -- see `consent-churn/references.bib`) + five FL averaging methods (FedAvg/FedProx/FedAvgM/FedAdam/SCAFFOLD) compared across 3 silos and IID→severe non-IID. Establishes the ceiling/floor/federated reference anchors. No consent churn yet. | done |
 | `02_consent_churn` | Inject transient / permanent(random) / permanent(biased) / whole-silo consent churn into the FedAvg round loop; measure utility degradation vs baselines over 5 seeds. Confirms H2 (who leaves > how many leave) via a count-matched isolation test. `churn.py` = schedules; `consent_churn_study.ipynb` = executed study. | done |
 | `02_consent_churn` (MLP amplification check) | Rerun the full churn grid with a higher-capacity averageable client (1-hidden-layer MLP, 64 units, centralized AUROC 0.670 vs logreg 0.666) on identical partitions/schedules. Result: **no amplification** — deltas match logreg within noise, so the churn-cost structure is model-independent and H2 survives the model swap. | done |
